@@ -1,1 +1,0 @@
-exports.createToken = require("./createToken");

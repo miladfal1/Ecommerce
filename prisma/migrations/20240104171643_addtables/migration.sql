@@ -7,6 +7,7 @@ CREATE TABLE "Address" (
     "country" TEXT NOT NULL,
     "city" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "userId" TEXT NOT NULL,
 
     CONSTRAINT "Address_pkey" PRIMARY KEY ("id")
 );
@@ -16,8 +17,7 @@ CREATE TABLE "User" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phoneNumber" INTEGER NOT NULL,
-    "addressId" TEXT NOT NULL,
+    "phoneNumber" DECIMAL(12,0) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -27,26 +27,9 @@ CREATE TABLE "Seller" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "phoneNumber" INTEGER NOT NULL,
-    "addressId" TEXT NOT NULL,
+    "phoneNumber" DECIMAL(12,0) NOT NULL,
 
     CONSTRAINT "Seller_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Brand" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "Brand_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Color" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-
-    CONSTRAINT "Color_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -71,10 +54,9 @@ CREATE TABLE "Category" (
 CREATE TABLE "ProductPrice" (
     "id" TEXT NOT NULL,
     "productId" TEXT NOT NULL,
-    "brandId" TEXT NOT NULL,
-    "colorId" TEXT NOT NULL,
     "sellerId" TEXT NOT NULL,
     "price" DECIMAL(9,2) NOT NULL,
+    "qty" INTEGER NOT NULL,
 
     CONSTRAINT "ProductPrice_pkey" PRIMARY KEY ("id")
 );
@@ -84,6 +66,7 @@ CREATE TABLE "Basket" (
     "id" TEXT NOT NULL,
     "productPriceId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "finalOrderId" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
     "qty" INTEGER NOT NULL,
@@ -108,15 +91,6 @@ CREATE TABLE "FinalOrders" (
 );
 
 -- CreateTable
-CREATE TABLE "Inventory" (
-    "id" TEXT NOT NULL,
-    "productPriceId" TEXT NOT NULL,
-    "instock" INTEGER NOT NULL,
-
-    CONSTRAINT "Inventory_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "Attribute" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
@@ -128,19 +102,15 @@ CREATE TABLE "Attribute" (
 
 -- CreateTable
 CREATE TABLE "ProductAttribute" (
-    "id" TEXT NOT NULL,
     "productId" TEXT NOT NULL,
     "attributeId" TEXT NOT NULL,
     "value" TEXT NOT NULL,
 
-    CONSTRAINT "ProductAttribute_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "ProductAttribute_pkey" PRIMARY KEY ("productId","attributeId")
 );
 
 -- AddForeignKey
-ALTER TABLE "User" ADD CONSTRAINT "User_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Seller" ADD CONSTRAINT "Seller_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Product" ADD CONSTRAINT "Product_categoryId_fkey" FOREIGN KEY ("categoryId") REFERENCES "Category"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -152,12 +122,6 @@ ALTER TABLE "Category" ADD CONSTRAINT "Category_parentId_fkey" FOREIGN KEY ("par
 ALTER TABLE "ProductPrice" ADD CONSTRAINT "ProductPrice_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "ProductPrice" ADD CONSTRAINT "ProductPrice_brandId_fkey" FOREIGN KEY ("brandId") REFERENCES "Brand"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "ProductPrice" ADD CONSTRAINT "ProductPrice_colorId_fkey" FOREIGN KEY ("colorId") REFERENCES "Color"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "ProductPrice" ADD CONSTRAINT "ProductPrice_sellerId_fkey" FOREIGN KEY ("sellerId") REFERENCES "Seller"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -167,13 +131,13 @@ ALTER TABLE "Basket" ADD CONSTRAINT "Basket_productPriceId_fkey" FOREIGN KEY ("p
 ALTER TABLE "Basket" ADD CONSTRAINT "Basket_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "Basket" ADD CONSTRAINT "Basket_finalOrderId_fkey" FOREIGN KEY ("finalOrderId") REFERENCES "FinalOrders"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "FinalOrders" ADD CONSTRAINT "FinalOrders_addressId_fkey" FOREIGN KEY ("addressId") REFERENCES "Address"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "FinalOrders" ADD CONSTRAINT "FinalOrders_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Inventory" ADD CONSTRAINT "Inventory_productPriceId_fkey" FOREIGN KEY ("productPriceId") REFERENCES "ProductPrice"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "ProductAttribute" ADD CONSTRAINT "ProductAttribute_productId_fkey" FOREIGN KEY ("productId") REFERENCES "Product"("id") ON DELETE CASCADE ON UPDATE CASCADE;
