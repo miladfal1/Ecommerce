@@ -15,6 +15,8 @@ CREATE TABLE "Address" (
 -- CreateTable
 CREATE TABLE "User" (
     "id" TEXT NOT NULL,
+    "password" TEXT NOT NULL DEFAULT '1234',
+    "username" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "phoneNumber" DECIMAL(12,0) NOT NULL,
@@ -83,7 +85,6 @@ CREATE TABLE "FinalOrders" (
     "transforFee" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "finalPrice" DECIMAL(9,2) NOT NULL,
-    "discount" DECIMAL(2,2) NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -108,6 +109,9 @@ CREATE TABLE "ProductAttribute" (
 
     CONSTRAINT "ProductAttribute_pkey" PRIMARY KEY ("productId","attributeId")
 );
+
+-- CreateIndex
+CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
 -- AddForeignKey
 ALTER TABLE "Address" ADD CONSTRAINT "Address_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

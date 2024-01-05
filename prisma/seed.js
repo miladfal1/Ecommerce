@@ -15,7 +15,7 @@ async function main() {
         phoneNumber: "1234567890",
       },
       {
-        name: "Jane Doe",
+        name: "Reace Bin",
         email: "jane@example.com",
         phoneNumber: "9876543210",
       },
@@ -66,16 +66,18 @@ async function main() {
       {
         productPriceId: productPrices[0].id,
         userId: users[0].id,
+        finalOrderId: finalOrders[0].id,
         qty: 3,
-        status: "Pending",
+        status: "Done",
         price: 150,
       },
       {
         productPriceId: productPrices[1].id,
-        userId: users[1].id,
+        userId: users[0].id,
+        finalOrderId: finalOrders[0].id,
         qty: 2,
-        status: "Pending",
-        price: 200,
+        status: "Done",
+        price: 20,
       },
     ],
   });
@@ -87,14 +89,7 @@ async function main() {
         transforFee: 20,
         userId: users[0].id,
         finalPrice: 170,
-        discount: 5,
-      },
-      {
-        addressId: addresses[1].id,
-        transforFee: 25,
-        userId: users[1].id,
-        finalPrice: 220,
-        discount: 10,
+        // discount: 5,
       },
     ],
   });

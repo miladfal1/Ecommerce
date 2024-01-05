@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "start:dev": "node --watch app.js"
+    "start:dev": "node --watch app.js",
+    "seed": "node ./prisma/seed.js"
   },
   "keywords": [],
   "author": "",
