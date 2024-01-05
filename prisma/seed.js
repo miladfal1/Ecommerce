@@ -11,11 +11,13 @@ async function main() {
     data: [
       {
         name: "John Doe",
+        password: "12345",
         email: "john@example.com",
         phoneNumber: "1234567890",
       },
       {
         name: "Reace Bin",
+        password: "123456",
         email: "jane@example.com",
         phoneNumber: "9876543210",
       },

@@ -6,26 +6,26 @@ module.exports = async function createToken(
   secretKey,
   refreshExpire,
   accessExpire,
-  username = null
+  // username = null
 ) {
   try {
     const accessToken = jwt.sign(payload, secretKey, {
       expiresIn: accessExpire,
     });
-    console.log("access Token: ", accessToken);
+    // console.log("access Token: ", accessToken);
     const refreshToken = jwt.sign(payload, secretKey, {
       expiresIn: refreshExpire,
     });
-    console.log("refre Token: ", refreshToken);
+    // console.log("refre Token: ", refreshToken);
 
-    if (username) {
-      await db.token.create({
-        data: {
-          userId: username,
-          token: refreshToken,
-        },
-      });
-    }
+    // if (username) {
+    //   await db.token.create({
+    //     data: {
+    //       userId: username,
+    //       token: refreshToken,
+    //     },
+    //   });
+    // }
     return {
       refreshToken,
       accessToken,

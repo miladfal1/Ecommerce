@@ -25,6 +25,35 @@ app.use((req, res, next) => {
 
 /// error handlers
 
+// TODO: add all prisma errors as custom Error
+// const prismaErrMap = new Map();
+// prismaErrMap.set("P2002", "chenin user darim! ye username dg bezan");
+
+app.use((err, req, res, next) => {
+  // if (err instanceof PrismaClientKnownRequestError) {
+  //   const errMessage = prismaErrMap.get(err.code);
+  //   const error = new MyError(errMessage, 400);
+  //   next(error);
+  // } else {
+    const defaultError = new MyError(err.message, 400);
+    next(defaultError);
+  // }
+});
+
+app.use((err, req, res, next) => {
+  if (err instanceof MyError) {
+    return res.status(err.code).json({
+      status: "error",
+      errCode: err.code,
+      message: err.message,
+    });
+  }
+  return res.json({
+    status: "error",
+    message: err.message,
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`server is runnnig on port ${PORT}`);
 });
