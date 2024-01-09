@@ -19,7 +19,7 @@ exports.register = async (req, res, next) => {
     const user = await db.user.create({
       data: { username, password: hashedPasssword },
     });
-
+    // if user exist what then ? 
     return res.json({ msg: `user ${user.username} registerd` });
   } catch (e) {
   // TODO: Error handler!
@@ -57,51 +57,55 @@ exports.login = async (req, res, next) => {
 };
 
 
-// exports.getUser = async (req, res, next) => {
-//   try {
-//     const username = req.params.username;
-//     const user = await db.user.findFirst({
-//       where: { name: username },
-//       include: {
-//         Address: true,
-//         FinalOrders: true,
-//         Basket: true,
-//       },
-//     });
-//     if (!user) {
-//       return res.status(404).json({ error: "کاربر یافت نشد" });
-//     }
-//     res.json({ user });
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
-// exports.deleteUser = async (req, res, next) => {
-//   try {
-//     const username = req.params.username;
-//     await db.user.delete({
-//       where: {
-//         name: username,
-//       },
-//     });
-//     res.send("user deleted");
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
-// exports.updateUser = async (req, res, next) => {
-//   const username = req.params.username;
-//   const { email, phoneNumber } = req.body;
-//   await db.user.update({
-//     where: {
-//       name: username,
-//     },
-//     data: {
-//       email: email,
-//       phoneNumber: phoneNumber,
-//     },
-//   });
-//   res.send("user updated");
-// };
+
+
+exports.getUser = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    const user = await db.user.findFirst({
+      where: { name: username },
+      include: {
+        Address: true,
+        FinalOrders: true,
+        Basket: true,
+      },
+    });
+    if (!user) {
+      return res.status(404).json({ error: "کاربر یافت نشد" });
+    }
+    res.json({ user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const username = req.params.username;
+    await db.user.delete({
+      where: {
+        name: username,
+      },
+    });
+    res.send("user deleted");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updateUser = async (req, res, next) => {
+  const username = req.params.username;
+  const { email, phoneNumber } = req.body;
+  await db.user.update({
+    where: {
+      name: username,
+    },
+    data: {
+      email: email,
+      phoneNumber: phoneNumber,
+    },
+  });
+  res.send("user updated");
+};

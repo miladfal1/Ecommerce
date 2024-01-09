@@ -17,7 +17,7 @@ model Address {
   id          String        @id @default(uuid())
   country     String
   city        String
-  description String
+  description String?
   user        User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   FinalOrders FinalOrders[]
@@ -38,16 +38,16 @@ model User {
 model Seller {
   id           String         @id @default(uuid())
   name         String
-  email        String
-  phoneNumber  Decimal        @db.Decimal(12, 0)
+  email        String?
+  phoneNumber  Decimal?        @db.Decimal(12, 0)
   ProductPrice ProductPrice[]
 }
 
 model Product {
   id               String             @id @default(uuid())
   name             String
-  category         Category           @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  categoryId       String
+  category         Category?          @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId       String?
   ProductPrice     ProductPrice[]
   ProductAttribute ProductAttribute[]
 }
@@ -91,7 +91,7 @@ model FinalOrders {
   id          String   @id @default(uuid())
   address     Address  @relation(fields: [addressId], references: [id], onDelete: Cascade)
   addressId   String
-  transforFee Int
+  transforFee Int?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
   finalPrice  Decimal  @db.Decimal(9, 2)
@@ -104,8 +104,8 @@ model FinalOrders {
 model Attribute {
   id               String             @id @default(uuid())
   name             String
-  type             String
-  unit             String
+  type             String?
+  unit             String?
   ProductAttribute ProductAttribute[]
 }
 
